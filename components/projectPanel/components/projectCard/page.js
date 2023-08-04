@@ -7,7 +7,7 @@ export default function ProjectCard(props){
             {testingSkills.map((value,index) =>
             {
                 return(<div key={"project-card-skills"+index}>
-                    {value}
+                    {value.title}
                 </div>)
             })}
         </div>

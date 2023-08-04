@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import ProjectCard from "./components/projectCard/page";
 
-const projectCardNames = ["Something", "Something eklse", "Soemthing else else"]
 
-export default function ProjectPanel() {
+export default function ProjectPanel(props) {
     const [page, setPage] = useState(0);
+    const allPanelData = props.data;
     const [data, setData] = useState([]);
     const elementPerPage = 2;
-    useEffect(() => { 
-        setData(projectCardNames.slice(elementPerPage * page, elementPerPage * page + elementPerPage)) 
+    useEffect(() => { ;
+        setData(allPanelData.slice(elementPerPage * page, elementPerPage * page + elementPerPage)) 
+        console.log(allPanelData.slice(elementPerPage * page, elementPerPage * page + elementPerPage));
     }, 
     [page])
 
     const pageButtonPressed = (pageNum) => {
-        if (pageNum > -1 && pageNum < projectCardNames.length / elementPerPage + 1) {
+        if (pageNum > -1 && pageNum < allPanelData.length / elementPerPage + 1) {
             setPage(pageNum)
         }
     }
@@ -23,7 +24,7 @@ export default function ProjectPanel() {
             <button onClick={() => pageButtonPressed(page - 1)}>{"Page Num: " + page}</button>
             <button onClick={() => pageButtonPressed(page + 1)}>{"Page Num: " + page}</button>
             {data.map((value, index) => {
-                return (<ProjectCard key={"project-card-index-" + index} name={value} />)
+                return (<ProjectCard key={"project-card-index-" + index} name={value.title} />)
             })}
         </div>
     )
