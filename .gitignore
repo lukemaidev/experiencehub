@@ -36,3 +36,5 @@ next-env.d.ts
 
 #ignore componentTesting page
 /app/componentTesting
+
+.env
