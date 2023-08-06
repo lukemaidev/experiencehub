@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PanelCard from "./components/Card/page";
+import PanelCard from "./components/Card";
 
 
 export default function Panel(props) {
@@ -7,12 +7,15 @@ export default function Panel(props) {
     const allPanelData = props.data;
     const [data, setData] = useState([]);
     const elementPerPage = 2;
+
+    //Controlling the page content based on the page number
     useEffect(() => { ;
         setData(allPanelData.slice(elementPerPage * page, elementPerPage * page + elementPerPage)) 
         console.log(allPanelData.slice(elementPerPage * page, elementPerPage * page + elementPerPage));
     }, 
     [page])
 
+    //Controlling the page number
     const pageButtonPressed = (pageNum) => {
         if (pageNum > -1 && pageNum < allPanelData.length / elementPerPage + 1) {
             setPage(pageNum)
