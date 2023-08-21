@@ -1,25 +1,56 @@
 import useInput from "@/hooks/useInput";
-import PostData from "@/ultil/postData";
+import CallData from "@/ultil/callData";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function ProjectForm() {
-    const title = useInput("");
-    const description = useInput("");
+  const projectName = useInput("");
+  const projectDescription = useInput("");
+  const [sendingData, setSendingData] = useState(false);
+  const userId = useSelector((state) => state.users);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const data = {
-            title: title.value,
-            description: description.value
-        }
-        //PostData(data, process.env.BACKEND_URL+"project");
-    }
-    return(
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="title">Title</label>
-            <input type="text" id="title" name="title" required onChange={title.onChange} />
-            <label htmlFor="description">Description</label>
-            <input type="text" id="description" name="description" required onChange={description.onChange} />
-            <button type="submit">Submit</button>
-        </form>
-    )
+  async function handleSubmit(e) {
+    e.preventDefault();
+    console.log(userId);
+    const data = {
+      projectName: projectName.value,
+      projectDescription: projectDescription.value,
+      projectCreatorId: userId.userId,
+      timeCreated: Date.now(),
+      timeDelivered: "Pending",
+      projectDelivererIds: []
+    };
+
+    setSendingData(true);
+    console.log(sendingData);
+    const respondData = await CallData(data, "api/project", "POST").then(function (response) {
+      setSendingData(false);
+      console.log(response);
+    });
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="projectName">Project Name</label>
+      <input
+        type="text"
+        id="projectName"
+        name="projectName"
+        required
+        onChange={projectName.onChange}
+      />
+      <label htmlFor="projectDescription">Description</label>
+      <input
+        type="text"
+        id="projectDescription"
+        name="projectDescription"
+        required
+        onChange={projectDescription.onChange}
+      />
+      <button type="submit" onClick={() => setSendingData(true)}>
+        Submit
+      </button>
+      {sendingData ? <p>True</p> : <p>False</p>}
+      {sendingData && <p>Sending data...</p>}
+    </form>
+  );
 }
